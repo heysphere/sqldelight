@@ -62,15 +62,48 @@ interface TransactionWithoutReturn : TransactionCallbacks {
  */
 interface Transacter {
   /**
-   * Starts a [Transaction] and runs [body] in that transaction.
+   * Starts a read-write [Transaction] and runs [body] in that transaction.
    *
    * @throws IllegalStateException if [noEnclosing] is true and there is already an active
    *   [Transaction] on this thread.
    */
-  fun <R> transactionWithResult(
+  fun <R> writeWithResult(
     noEnclosing: Boolean = false,
     bodyWithReturn: TransactionWithReturn<R>.() -> R
   ): R
+
+  /**
+   * Starts a read-write [Transaction] and runs [body] in that transaction.
+   *
+   * @throws IllegalStateException if [noEnclosing] is true and there is already an active
+   *   [Transaction] on this thread.
+   */
+  fun write(
+    noEnclosing: Boolean = false,
+    body: TransactionWithoutReturn.() -> Unit
+  )
+
+  /**
+   * Starts a read-only [Transaction] and runs [body] in that transaction.
+   *
+   * @throws IllegalStateException if [noEnclosing] is true and there is already an active
+   *   [Transaction] on this thread, or if the active transaction on this thread is read-only.
+   */
+  fun <R> readWithResult(
+    noEnclosing: Boolean = false,
+    bodyWithReturn: TransactionWithReturn<R>.() -> R
+  ): R
+
+  /**
+   * Starts a read-only [Transaction] and runs [body] in that transaction.
+   *
+   * @throws IllegalStateException if [noEnclosing] is true and there is already an active
+   *   [Transaction] on this thread, or if the active transaction on this thread is read-only.
+   */
+  fun read(
+    noEnclosing: Boolean = false,
+    body: TransactionWithoutReturn.() -> Unit
+  )
 
   /**
    * Starts a [Transaction] and runs [body] in that transaction.
@@ -78,16 +111,37 @@ interface Transacter {
    * @throws IllegalStateException if [noEnclosing] is true and there is already an active
    *   [Transaction] on this thread.
    */
+  @Deprecated(
+    replaceWith = ReplaceWith("writeWithResult"),
+    message = "Renamed to `writeWithResult()`. Consider using `readWithResult()` if no write is done in the body."
+  )
+  fun <R> transactionWithResult(
+    noEnclosing: Boolean = false,
+    bodyWithReturn: TransactionWithReturn<R>.() -> R
+  ): R = writeWithResult(noEnclosing, bodyWithReturn)
+
+  /**
+   * Starts a [Transaction] and runs [body] in that transaction.
+   *
+   * @throws IllegalStateException if [noEnclosing] is true and there is already an active
+   *   [Transaction] on this thread.
+   */
+  @Deprecated(
+    replaceWith = ReplaceWith("write"),
+    message = "Renamed to `write()`. Consider using `read()` if no write is done in the body."
+  )
   fun transaction(
     noEnclosing: Boolean = false,
     body: TransactionWithoutReturn.() -> Unit
-  )
+  ) = write(noEnclosing, body)
 
   /**
    * A SQL transaction. Can be created through the driver via [SqlDriver.newTransaction] or
    * through an implementation of [Transacter] by calling [Transacter.transaction].
    */
   abstract class Transaction : TransactionCallbacks {
+    abstract val isReadOnly: Boolean
+
     internal val postCommitHooks = sharedSet<Supplier<() -> Unit>>()
     internal val postRollbackHooks = sharedSet<Supplier<() -> Unit>>()
     internal val queriesFuncs = sharedMap<Int, Supplier<() -> List<Query<*>>>>()
@@ -190,22 +244,36 @@ abstract class TransacterImpl(private val driver: SqlDriver) : Transacter {
     }
   }
 
-  override fun transaction(
+  override fun read(
     noEnclosing: Boolean,
     body: TransactionWithoutReturn.() -> Unit
   ) {
-    transactionWithWrapper<Unit?>(noEnclosing, body)
+    transactionWithWrapper<Unit?>(readOnly = true, noEnclosing, body)
   }
 
-  override fun <R> transactionWithResult(
+  override fun <R> readWithResult(
     noEnclosing: Boolean,
     bodyWithReturn: TransactionWithReturn<R>.() -> R
   ): R {
-    return transactionWithWrapper(noEnclosing, bodyWithReturn)
+    return transactionWithWrapper(readOnly = true, noEnclosing, bodyWithReturn)
   }
 
-  private fun <R> transactionWithWrapper(noEnclosing: Boolean, wrapperBody: TransactionWrapper<R>.() -> R): R {
-    val transaction = driver.newTransaction()
+  override fun write(
+    noEnclosing: Boolean,
+    body: TransactionWithoutReturn.() -> Unit
+  ) {
+    transactionWithWrapper<Unit?>(readOnly = false, noEnclosing, body)
+  }
+
+  override fun <R> writeWithResult(
+    noEnclosing: Boolean,
+    bodyWithReturn: TransactionWithReturn<R>.() -> R
+  ): R {
+    return transactionWithWrapper(readOnly = false, noEnclosing, bodyWithReturn)
+  }
+
+  private fun <R> transactionWithWrapper(readOnly: Boolean, noEnclosing: Boolean, wrapperBody: TransactionWrapper<R>.() -> R): R {
+    val transaction = driver.newTransaction(readOnly)
     val enclosing = transaction.enclosingTransaction()
 
     check(enclosing == null || !noEnclosing) { "Already in a transaction" }

@@ -60,8 +60,16 @@ interface SqlDriver : Closeable {
    * Start a new [Transacter.Transaction] on the database.
    *
    * It's up to the implementor how this method behaves for different connection/threading patterns.
+   *
+   * @param readOnly Whether the transaction should be read-only, or should be read-write capable.
    */
-  fun newTransaction(): Transacter.Transaction
+  fun newTransaction(readOnly: Boolean): Transacter.Transaction
+
+  @Deprecated(
+    message = "Use `newTransaction(readOnly = false)` instead.",
+    replaceWith = ReplaceWith("newTransaction(readOnly = false)")
+  )
+  fun newTransaction(): Transacter.Transaction = newTransaction(readOnly = false)
 
   /**
    * The currently open [Transacter.Transaction] on the database.

@@ -3,10 +3,12 @@ package com.squareup.sqldelight.driver.test
 import com.squareup.sqldelight.TransacterImpl
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.db.SqlDriver.Schema
+import com.squareup.sqldelight.db.use
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -212,4 +214,118 @@ abstract class TransacterTest {
 
     assertEquals(result, "rollback")
   }
+
+  @Test fun `write transaction cannot be enclosed by a read-only transaction`() {
+    assertFailsWith<IllegalStateException> {
+      transacter.read { transacter.write {} }
+    }
+    assertFailsWith<IllegalStateException> {
+      transacter.readWithResult { transacter.writeWithResult {} }
+    }
+  }
+
+  @Test fun `write transaction cannot be enclosed by a read-only transaction nested in a write transaction`() {
+    assertFailsWith<IllegalStateException> {
+      transacter.write { transacter.read { transacter.write {} } }
+    }
+    assertFailsWith<IllegalStateException> {
+      transacter.writeWithResult { transacter.readWithResult { transacter.writeWithResult {} } }
+    }
+  }
+
+  @Test fun `write transaction cannot be enclosed by a read-only transaction nested in a read-only transaction`() {
+    assertFailsWith<IllegalStateException> {
+      transacter.read { transacter.read { transacter.write {} } }
+    }
+    assertFailsWith<IllegalStateException> {
+      transacter.readWithResult { transacter.readWithResult { transacter.writeWithResult {} } }
+    }
+  }
+
+  @Test fun `reads are allowed in a read-only transaction`() {
+    transacter.read { performRead() }
+    val done = transacter.readWithResult<Boolean> { performRead() }
+    assertTrue(done)
+  }
+
+  @Test fun `reads are allowed in a write transaction`() {
+    transacter.write { performRead() }
+    val done = transacter.writeWithResult<Boolean> { performRead() }
+    assertTrue(done)
+  }
+
+  @Test fun `reads are allowed in a read-only transaction nested in a read-only transaction`() {
+    transacter.read { transacter.read { performRead() } }
+    val done = transacter.readWithResult<Boolean> {
+      transacter.readWithResult { performRead() }
+    }
+    assertTrue(done)
+  }
+
+  @Test fun `reads are allowed in a read-only transaction nested in a write transaction`() {
+    transacter.write { transacter.read { performRead() } }
+    val done = transacter.writeWithResult<Boolean> { transacter.readWithResult { performRead() } }
+    assertTrue(done)
+  }
+
+  @Test fun `reads are allowed in a write transaction nested in a write transaction`() {
+    transacter.write { transacter.write { performRead() } }
+    val done = transacter.writeWithResult<Boolean> { transacter.writeWithResult { performRead() } }
+    assertTrue(done)
+  }
+
+  @Test fun `writes are prohibited in a read-only transaction`() {
+    assertFailsWith<IllegalStateException> {
+      transacter.read {
+        performWrite()
+      }
+    }
+    assertFailsWith<IllegalStateException> {
+      transacter.readWithResult<Unit> {
+        performWrite()
+      }
+    }
+  }
+
+  @Test fun `writes are prohibited in a read-only transaction nested in a write transaction`() {
+    assertFailsWith<IllegalStateException> {
+      transacter.write {
+        transacter.read {
+          performWrite()
+        }
+      }
+    }
+    assertFailsWith<IllegalStateException> {
+      transacter.writeWithResult {
+        transacter.readWithResult {
+          performWrite()
+        }
+      }
+    }
+  }
+
+  @Test fun `writes are prohibited in a read-only transaction nested in a read-only transaction`() {
+    assertFailsWith<IllegalStateException> {
+      transacter.read {
+        transacter.read {
+          performWrite()
+        }
+      }
+    }
+    assertFailsWith<IllegalStateException> {
+      transacter.readWithResult {
+        transacter.readWithResult {
+          performWrite()
+        }
+      }
+    }
+  }
+
+  private fun performRead(): Boolean {
+    return driver.executeQuery(null, "PRAGMA user_version", 0, null)
+      .use { it.next() }
+      .apply { check(this) }
+  }
+
+  private fun performWrite() = driver.execute(null, "PRAGMA user_version = 0", 0, null)
 }

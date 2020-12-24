@@ -162,13 +162,13 @@ class NativeSqliteDriver(
     return borrowedConnectionThread.get()?.value?.transaction?.value
   }
 
-  override fun newTransaction(): Transacter.Transaction {
+  override fun newTransaction(readOnly: Boolean): Transacter.Transaction {
     val alreadyBorrowed = borrowedConnectionThread.get()
     return if (alreadyBorrowed == null) {
-      val borrowed = writerPool.borrowEntry()
+      val borrowed = if (readOnly) readerPool.borrowEntry() else writerPool.borrowEntry()
 
       try {
-        val trans = borrowed.value.newTransaction()
+        val trans = borrowed.value.newTransaction(readOnly)
         borrowedConnectionThread.value =
           borrowed.freeze() // Probably don't need to freeze, but revisit.
         trans
@@ -178,7 +178,7 @@ class NativeSqliteDriver(
         throw e
       }
     } else {
-      alreadyBorrowed.value.newTransaction()
+      alreadyBorrowed.value.newTransaction(readOnly)
     }
   }
 
@@ -193,11 +193,16 @@ class NativeSqliteDriver(
 
     if (mine != null) {
       // Reads can use any connection, while writes can only use the only writer connection in `writerPool`.
-      if (readOnly || !mine.value.isReadOnly) {
+      if (readOnly || mine.value.canReadWrite) {
         return mine.value.block()
       }
 
-      throw IllegalStateException("Attempting to perform writes using a reader connection.")
+      throw IllegalStateException(
+        if (mine.value.isReadOnly)
+          "Attempting to write using a reader connection."
+        else
+          "Attempting to write inside a read-only transaction."
+      )
     }
 
     return if (readOnly) {
@@ -243,7 +248,7 @@ internal class SqliterWrappedConnection(
   SqlDriver {
   override fun currentTransaction(): Transacter.Transaction? = threadConnection.transaction.value
 
-  override fun newTransaction(): Transacter.Transaction = threadConnection.newTransaction()
+  override fun newTransaction(readOnly: Boolean): Transacter.Transaction = threadConnection.newTransaction(readOnly)
 
   override fun <R> accessConnection(
     readOnly: Boolean,
@@ -267,6 +272,9 @@ internal class ThreadConnection(
   private val connection: DatabaseConnection,
   private val borrowedConnectionThread: ThreadLocalRef<Borrowed<ThreadConnection>>?
 ) : Closeable {
+  val canReadWrite: Boolean
+    get() = !isReadOnly && !(transaction.get()?.isReadOnly ?: false)
+
   private val inUseStatements = frozenLinkedList<Statement>() as SharedLinkedList<Statement>
 
   internal val transaction: AtomicReference<Transacter.Transaction?> = AtomicReference(null)
@@ -306,15 +314,22 @@ internal class ThreadConnection(
     return connection.createStatement(sql)
   }
 
-  fun newTransaction(): Transacter.Transaction {
+  fun newTransaction(isReadOnly: Boolean): Transacter.Transaction {
     val enclosing = transaction.value
 
     // Create here, in case we bomb...
     if (enclosing == null) {
+      check(isReadOnly || !this.isReadOnly) {
+        "Attempting to start a read-write transaction with a reader connection."
+      }
       connection.beginTransaction()
+    } else {
+      check(isReadOnly || !enclosing.isReadOnly) {
+        "Attempting to start a nested read-write transaction inside a read-only transaction."
+      }
     }
 
-    val trans = Transaction(enclosing).freeze()
+    val trans = Transaction(isReadOnly, enclosing).freeze()
     transaction.value = trans
 
     return trans
@@ -342,6 +357,7 @@ internal class ThreadConnection(
   }
 
   private inner class Transaction(
+    override val isReadOnly: Boolean,
     override val enclosingTransaction: Transacter.Transaction?
   ) : Transacter.Transaction() {
     override fun endTransaction(successful: Boolean) {

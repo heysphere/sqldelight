@@ -51,9 +51,9 @@ class LogSqliteDriver(
     return sqlDriver.executeQuery(identifier, sql, parameters, binders)
   }
 
-  override fun newTransaction(): Transacter.Transaction {
+  override fun newTransaction(readOnly: Boolean): Transacter.Transaction {
     logger("TRANSACTION BEGIN")
-    val transaction = sqlDriver.newTransaction()
+    val transaction = sqlDriver.newTransaction(readOnly)
     transaction.afterCommit { logger("TRANSACTION COMMIT") }
     transaction.afterRollback { logger("TRANSACTION ROLLBACK") }
     return transaction
