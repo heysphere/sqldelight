@@ -14,6 +14,7 @@ kotlin {
     commonTest {
       dependencies {
         implementation deps.kotlin.test.common
+        implementation deps.kotlin.test.commonAnnotations
         implementation deps.testhelp
         implementation project(':drivers:driver-test')
       }

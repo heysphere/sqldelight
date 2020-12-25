@@ -6,10 +6,6 @@ import co.touchlab.sqliter.DatabaseConnection
 import co.touchlab.sqliter.DatabaseManager
 import co.touchlab.sqliter.Statement
 import co.touchlab.sqliter.withStatement
-import co.touchlab.stately.collections.SharedHashMap
-import co.touchlab.stately.collections.SharedLinkedList
-import co.touchlab.stately.collections.frozenHashMap
-import co.touchlab.stately.collections.frozenLinkedList
 import co.touchlab.stately.concurrency.AtomicReference
 import co.touchlab.stately.concurrency.ThreadLocalRef
 import co.touchlab.stately.concurrency.value
@@ -19,7 +15,8 @@ import com.squareup.sqldelight.db.Closeable
 import com.squareup.sqldelight.db.SqlCursor
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.db.SqlPreparedStatement
-import com.squareup.sqldelight.drivers.native.util.cleanUp
+import com.squareup.sqldelight.drivers.native.util.Transferrable
+import com.squareup.sqldelight.drivers.native.util.TransferrableBox
 import com.squareup.sqldelight.drivers.native.util.createDatabaseManager
 
 sealed class ConnectionWrapper : SqlDriver {
@@ -72,10 +69,13 @@ sealed class ConnectionWrapper : SqlDriver {
       }
 
       val cursor = statement.query()
-      val cursorToRecycle = cursorCollection.addNode(cursor)
+      withValue { it.cursorCollection.add(cursor) }
+
       SqliterSqlCursor(cursor) {
         statement.resetStatement()
-        cursorToRecycle.remove()
+        this.attachToCurrentWorker()
+        withValue { it.cursorCollection.remove(cursor) }
+        this.detachFromCurrentWorker()
         safePut(identifier, statement)
       }
     }
@@ -189,21 +189,28 @@ class NativeSqliteDriver(
     readOnly: Boolean,
     block: ThreadConnection.() -> R
   ): R {
+    fun ThreadConnection.wrappedBlock(): R {
+      this.attachToCurrentWorker()
+      val result = block()
+      this.detachFromCurrentWorker()
+      return result
+    }
+
     val mine = borrowedConnectionThread.get()
 
     if (mine != null) {
       // Reads can use any connection, while writes can only use the only writer connection in `writerPool`.
       if (readOnly || !mine.value.isReadOnly) {
-        return mine.value.block()
+        return mine.value.wrappedBlock()
       }
 
       throw IllegalStateException("Attempting to perform writes using a reader connection.")
     }
 
     return if (readOnly) {
-      readerPool.access { it.block() }
+      readerPool.access { it.wrappedBlock() }
     } else {
-      writerPool.access { it.block() }
+      writerPool.access { it.wrappedBlock() }
     }
   }
 
@@ -266,44 +273,54 @@ internal class ThreadConnection(
   val isReadOnly: Boolean,
   private val connection: DatabaseConnection,
   private val borrowedConnectionThread: ThreadLocalRef<Borrowed<ThreadConnection>>?
-) : Closeable {
-  private val inUseStatements = frozenLinkedList<Statement>() as SharedLinkedList<Statement>
+) : TransferrableBox<ThreadConnection.State>(State()), Closeable {
+  class State(
+    var inUseStatements: MutableSet<Statement> = mutableSetOf(),
+    var cursorCollection: MutableSet<Cursor> = mutableSetOf(),
+    var statementCache: MutableMap<Int, Statement> = mutableMapOf()
+  ): Transferrable<State> {
+    override fun mutableDeepCopy(): State = State(
+      inUseStatements = inUseStatements.toMutableSet(),
+      cursorCollection = cursorCollection.toMutableSet(),
+      statementCache = statementCache.toMutableMap()
+    )
+
+    override fun freeze(): State = freeze()
+  }
 
   internal val transaction: AtomicReference<Transacter.Transaction?> = AtomicReference(null)
-  internal val cursorCollection = frozenLinkedList<Cursor>() as SharedLinkedList<Cursor>
 
   // This could probably be a list, assuming the id int is starting at zero/one and incremental.
-  internal val statementCache = frozenHashMap<Int, Statement>() as SharedHashMap<Int, Statement>
 
-  fun safePut(identifier: Int?, statement: Statement) {
-    check(inUseStatements.remove(statement)) { "Tried to recollect a statement that is not currently in use" }
+  fun safePut(identifier: Int?, statement: Statement) = withValue { state ->
+    check(state.inUseStatements.remove(statement)) { "Tried to recollect a statement that is not currently in use" }
 
     val removed = if (identifier == null) {
       statement
     } else {
-      statementCache.put(identifier, statement)
+      state.statementCache.put(identifier, statement)
     }
     removed?.finalizeStatement()
   }
 
-  fun getStatement(identifier: Int?, sql: String): Statement {
+  fun getStatement(identifier: Int?, sql: String): Statement = withValue { state ->
     val statement = removeCreateStatement(identifier, sql)
-    inUseStatements.add(statement)
-    return statement
+    state.inUseStatements.add(statement)
+    statement
   }
 
   /**
    * For cursors. Cursors are actually backed by SQLite statement instances, so they need to be
    * removed from the cache when in use. We're giving out a SQLite resource here, so extra care.
    */
-  private fun removeCreateStatement(identifier: Int?, sql: String): Statement {
+  private fun removeCreateStatement(identifier: Int?, sql: String): Statement = withValue { state ->
     if (identifier != null) {
-      val cached = statementCache.remove(identifier)
+      val cached = state.statementCache.remove(identifier)
       if (cached != null)
-        return cached
+        return@withValue cached
     }
 
-    return connection.createStatement(sql)
+    connection.createStatement(sql)
   }
 
   fun newTransaction(): Transacter.Transaction {
@@ -324,20 +341,25 @@ internal class ThreadConnection(
    * This should only be called directly from wrapConnection. Clean resources without actually closing
    * the underlying connection.
    */
-  internal fun cleanUp() {
-    inUseStatements.cleanUp {
+  internal fun cleanUp() = withValue { state ->
+    state.inUseStatements.forEach {
       it.finalizeStatement()
     }
-    cursorCollection.cleanUp {
+    state.cursorCollection.forEach {
       it.statement.finalizeStatement()
     }
-    statementCache.cleanUp {
+    state.statementCache.forEach {
       it.value.finalizeStatement()
     }
+
+    state.inUseStatements = mutableSetOf()
+    state.cursorCollection = mutableSetOf()
+    state.statementCache = mutableMapOf()
   }
 
   override fun close() {
     cleanUp()
+    super.close()
     connection.close()
   }
 
