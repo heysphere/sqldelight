@@ -1,15 +1,11 @@
 package com.squareup.sqldelight.drivers.native
 
-import co.touchlab.sqliter.Cursor
 import co.touchlab.sqliter.DatabaseConfiguration
 import co.touchlab.sqliter.DatabaseConnection
 import co.touchlab.sqliter.DatabaseManager
 import co.touchlab.sqliter.Statement
 import co.touchlab.sqliter.createDatabaseManager
-import co.touchlab.stately.collections.SharedHashMap
-import co.touchlab.stately.collections.SharedLinkedList
-import co.touchlab.stately.collections.frozenHashMap
-import co.touchlab.stately.collections.frozenLinkedList
+import co.touchlab.stately.concurrency.AtomicBoolean
 import co.touchlab.stately.concurrency.AtomicReference
 import co.touchlab.stately.concurrency.ThreadLocalRef
 import co.touchlab.stately.concurrency.value
@@ -18,7 +14,6 @@ import com.squareup.sqldelight.Transacter
 import com.squareup.sqldelight.db.SqlCursor
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.db.SqlPreparedStatement
-import com.squareup.sqldelight.drivers.native.util.cleanUp
 
 sealed class ConnectionWrapper : SqlDriver {
   internal abstract fun <R> accessConnection(
@@ -38,15 +33,13 @@ sealed class ConnectionWrapper : SqlDriver {
         try {
           SqliterStatement(statement).binders()
         } catch (t: Throwable) {
-          statement.resetStatement()
-          safePut(identifier, statement)
+          endStatementAccess(identifier, statement)
           throw t
         }
       }
 
       statement.execute()
-      statement.resetStatement()
-      safePut(identifier, statement)
+      endStatementAccess(identifier, statement)
     }
   }
 
@@ -64,8 +57,7 @@ sealed class ConnectionWrapper : SqlDriver {
         try {
           SqliterStatement(statement).binders()
         } catch (t: Throwable) {
-          statement.resetStatement()
-          safePut(identifier, statement)
+          endStatementAccess(identifier, statement)
           throw t
         }
       }
@@ -74,8 +66,7 @@ sealed class ConnectionWrapper : SqlDriver {
       val wrappedCursor = SqliterSqlCursor(cursor)
       val result = block(wrappedCursor)
 
-      statement.resetStatement()
-      safePut(identifier, statement)
+      endStatementAccess(identifier, statement)
 
       result
     }
@@ -247,39 +238,60 @@ internal class ThreadConnection(
   private val connection: DatabaseConnection,
   private val borrowedConnectionThread: ThreadLocalRef<SinglePool<ThreadConnection>.Borrowed>?
 ) {
-  private val inUseStatements = frozenLinkedList<Statement>() as SharedLinkedList<Statement>
-
   internal val transaction: AtomicReference<Transacter.Transaction?> = AtomicReference(null)
 
-  // This could probably be a list, assuming the id int is starting at zero/one and incremental.
-  internal val statementCache = frozenHashMap<Int, Statement>() as SharedHashMap<Int, Statement>
+  // A copy-on-write statement cache.
+  // Mutations are expected to be rare anyway: once per statement per connection per application invocation.
+  private val statementCache = AtomicReference(mapOf<Int, StatementEntry>().freeze())
 
-  fun safePut(identifier: Int?, statement: Statement) {
-    check(inUseStatements.remove(statement)) { "Tried to recollect a statement that is not currently in use" }
+  private class StatementEntry(val statement: Statement) {
+    // Mutating a stately-collections [SharedHashMap] or the simple CoW cache we have is an order of
+    // mangitude more expensive than stdlib [HashMap]. So instead of preventing incorrect reuse by
+    // removing in-use statements from the hash map, let's track usage via an [AtomicBoolean]
+    // embedded in each entry and avoid collection manipulation entirely.
+    val isInUse = AtomicBoolean(false)
+  }
 
-    val removed = if (identifier == null) {
-      statement
-    } else {
-      statementCache.put(identifier, statement)
+  fun endStatementAccess(identifier: Int?, statement: Statement) {
+    if (identifier != null) {
+      val entry = statementCache.get()[identifier]
+
+      if (entry != null && entry.statement == statement) {
+        statement.resetStatement()
+        val done = entry.isInUse.compareAndSet(expected = true, new = false)
+        check(done) { "Entry should have been marked as in-use before, so as to be unmarked here." }
+        return
+      }
     }
-    removed?.finalizeStatement()
+
+    statement.finalizeStatement()
   }
 
   fun getStatement(identifier: Int?, sql: String): Statement {
-    val statement = removeCreateStatement(identifier, sql)
-    inUseStatements.add(statement)
-    return statement
-  }
-
-  /**
-   * For cursors. Cursors are actually backed by SQLite statement instances, so they need to be
-   * removed from the cache when in use. We're giving out a SQLite resource here, so extra care.
-   */
-  private fun removeCreateStatement(identifier: Int?, sql: String): Statement {
     if (identifier != null) {
-      val cached = statementCache.remove(identifier)
-      if (cached != null)
-        return cached
+      val entry = statementCache.get()[identifier]
+
+      if (entry == null) {
+        val statement =  connection.createStatement(sql)
+
+        statementCache.set(
+          statementCache.get().toMutableMap()
+            .apply {
+              put(
+                identifier,
+                StatementEntry(statement)
+                  .apply { isInUse.value = true }
+              )
+            }
+            .freeze()
+        )
+
+        return statement
+      }
+
+      if (entry.isInUse.compareAndSet(expected = false, new = true)) {
+        return entry.statement
+      }
     }
 
     return connection.createStatement(sql)
@@ -304,11 +316,8 @@ internal class ThreadConnection(
    * the underlying connection.
    */
   internal fun cleanUp() {
-    inUseStatements.cleanUp {
-      it.finalizeStatement()
-    }
-    statementCache.cleanUp {
-      it.value.finalizeStatement()
+    statementCache.get().forEach {
+      it.value.statement.finalizeStatement()
     }
   }
 
