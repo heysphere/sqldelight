@@ -284,8 +284,6 @@ internal class ThreadConnection(
       cursorCollection = cursorCollection.toMutableSet(),
       statementCache = statementCache.toMutableMap()
     )
-
-    override fun freeze(): State = freeze()
   }
 
   internal val transaction: AtomicReference<Transacter.Transaction?> = AtomicReference(null)

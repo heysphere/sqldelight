@@ -3,8 +3,10 @@ package com.squareup.sqldelight.drivers.native
 import co.touchlab.stately.collections.frozenHashSet
 import co.touchlab.stately.concurrency.ThreadLocalRef
 import co.touchlab.stately.concurrency.value
+import co.touchlab.stately.freeze
 import com.squareup.sqldelight.drivers.native.util.Transferrable
 import com.squareup.sqldelight.drivers.native.util.TransferrableBox
+import com.squareup.sqldelight.drivers.native.util.createOnOtherWorker
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.test.Test
 import kotlin.time.Duration
@@ -15,16 +17,17 @@ import kotlin.time.microseconds
 @ThreadLocal
 var state: Bench.State = Bench.State()
 
+val range = 64..80
+
 class Bench {
-  class State(var counter: MutableSet<Int> = mutableSetOf()): Transferrable<State> {
+  class State(var counter: MutableSet<Int> = mutableSetOf<Int>().apply { addAll(1..128) }): Transferrable<State> {
     override fun mutableDeepCopy(): State = State(counter.toMutableSet())
-    override fun freeze(): State = freeze()
   }
 
   @Test
   fun thread_local() {
     measureAndReport("thread_local", 100_000) {
-      state.counter.add(1)
+      state.counter.addAll(range); state.counter.contains(range.start)
     }
   }
 
@@ -34,7 +37,8 @@ class Bench {
     box.value = State()
 
     measureAndReport("stately_thread_local", 100_000) {
-      box.value!!.counter.add(1)
+      box.value!!.counter.addAll(range)
+      box.value!!.counter.contains(range.start)
     }
   }
 
@@ -43,7 +47,19 @@ class Bench {
     val box = frozenHashSet<Int>()
 
     measureAndReport("stately_frozenSet", 100_000) {
-      box.add(1)
+      box.addAll(range)
+      box.contains(range.start)
+    }
+  }
+
+  @Test
+  fun shareable() {
+    val box = createOnOtherWorker { TransferrableBox(State()).freeze() }
+
+    measureAndReport("shareable", 100_000) {
+      box.attachToCurrentWorker()
+      box.withValue { it.counter.addAll(range); it.counter.contains(range.start) }
+      box.detachFromCurrentWorker()
     }
   }
 
@@ -52,8 +68,20 @@ class Bench {
     val box = TransferrableBox(State())
     measureAndReport("attach_to_box_in_each_itr", 100_000) {
       box.attachToCurrentWorker()
-      box.withValue { it.counter.add(1) }
+      box.withValue { it.counter.addAll(range); it.counter.contains(range.start) }
       box.detachFromCurrentWorker()
+    }
+  }
+
+  @Test
+  fun attach_to_box_in_each_itr_2() {
+    val box = TransferrableBox(State())
+    measureAndReport("attach_to_box_in_each_itr_2", 100_000) {
+      for (value in range) {
+        box.attachToCurrentWorker()
+        box.withValue { it.counter.add(value) }
+        box.detachFromCurrentWorker()
+      }
     }
   }
 
@@ -62,7 +90,7 @@ class Bench {
     val box = TransferrableBox(State())
     box.attachToCurrentWorker()
     measureAndReport("attach_to_box_once",100_000) {
-      box.withValue { it.counter.add(1) }
+      box.withValue { it.counter.addAll(range); it.counter.contains(range.start) }
     }
     box.detachFromCurrentWorker()
   }
@@ -71,7 +99,7 @@ class Bench {
   fun no_boxing() {
     val state = State()
     measureAndReport("no_boxing", 100_000) {
-      state.counter.add(1)
+      state.counter.addAll(range); state.counter.contains(range.start)
     }
   }
 

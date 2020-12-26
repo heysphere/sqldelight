@@ -7,3 +7,10 @@ expect open class TransferrableBox<T>(initial: T) where T: Any, T: Transferrable
   fun detachFromCurrentWorker()
   open fun close()
 }
+
+interface Transferrable<T> {
+  fun mutableDeepCopy(): T
+}
+
+@Suppress("NO_ACTUAL_FOR_EXPECT")
+expect fun <T> createOnOtherWorker(action: () -> T): T
