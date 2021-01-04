@@ -1,6 +1,5 @@
 package com.squareup.sqldelight.drivers.native
 
-import co.touchlab.sqliter.Cursor
 import co.touchlab.sqliter.DatabaseConfiguration
 import co.touchlab.sqliter.DatabaseConnection
 import co.touchlab.sqliter.DatabaseManager
@@ -34,7 +33,7 @@ sealed class ConnectionWrapper : SqlDriver {
     parameters: Int,
     binders: (SqlPreparedStatement.() -> Unit)?
   ) {
-    accessConnection(false) {
+    accessConnection(readOnly = false) {
       val statement = getStatement(identifier, sql)
       if (binders != null) {
         try {
@@ -52,13 +51,14 @@ sealed class ConnectionWrapper : SqlDriver {
     }
   }
 
-  final override fun executeQuery(
+  final override fun <R> executeQuery(
     identifier: Int?,
     sql: String,
     parameters: Int,
-    binders: (SqlPreparedStatement.() -> Unit)?
-  ): SqlCursor {
-    return accessConnection(true) {
+    binders: (SqlPreparedStatement.() -> Unit)?,
+    block: (SqlCursor) -> R
+  ): R {
+    return accessConnection(readOnly = true) {
       val statement = getStatement(identifier, sql)
 
       if (binders != null) {
@@ -72,12 +72,13 @@ sealed class ConnectionWrapper : SqlDriver {
       }
 
       val cursor = statement.query()
-      val cursorToRecycle = cursorCollection.addNode(cursor)
-      SqliterSqlCursor(cursor) {
-        statement.resetStatement()
-        cursorToRecycle.remove()
-        safePut(identifier, statement)
-      }
+      val wrappedCursor = SqliterSqlCursor(cursor)
+      val result = block(wrappedCursor)
+
+      statement.resetStatement()
+      safePut(identifier, statement)
+
+      result
     }
   }
 }
@@ -270,7 +271,6 @@ internal class ThreadConnection(
   private val inUseStatements = frozenLinkedList<Statement>() as SharedLinkedList<Statement>
 
   internal val transaction: AtomicReference<Transacter.Transaction?> = AtomicReference(null)
-  internal val cursorCollection = frozenLinkedList<Cursor>() as SharedLinkedList<Cursor>
 
   // This could probably be a list, assuming the id int is starting at zero/one and incremental.
   internal val statementCache = frozenHashMap<Int, Statement>() as SharedHashMap<Int, Statement>
@@ -327,9 +327,6 @@ internal class ThreadConnection(
   internal fun cleanUp() {
     inUseStatements.cleanUp {
       it.finalizeStatement()
-    }
-    cursorCollection.cleanUp {
-      it.statement.finalizeStatement()
     }
     statementCache.cleanUp {
       it.value.finalizeStatement()
