@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../coroutines-extensions/1.5.0-SNAPSHOT/coroutines-extensions-1.5.0-SNAPSHOT.module",
+    "group": "com.squareup.sqldelight",
+    "module": "coroutines-extensions",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "3ehalzzixvearnsencjhgelklu"
+    }
+  },
+  "variants": [
+    {
+      "name": "iosArm32-api",
+      "attributes": {
+        "artifactType": "org.jetbrains.kotlin.klib",
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.native.target": "ios_arm32",
+        "org.jetbrains.kotlin.platform.type": "native"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.3.9"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.3.9-native-mt"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "coroutines-extensions.klib",
+          "url": "coroutines-extensions-iosarm32-1.5.0-SNAPSHOT.klib",
+          "size": 10634,
+          "sha512": "9f3257391033449238ac95bc70c1d286f59755e1737ab3029682132ea2920ad15032e94c885964062cffb50dff25eb30480767f0b5d7e02b889de6f003b9f1f1",
+          "sha256": "19d5d77acd29a101d18f4d63138e4d3fa5932bd7241660b780d24d8934f18d3e",
+          "sha1": "bd098eaee0d4f6363032367b60d499dcd9275383",
+          "md5": "6a800d76bf34759082eab1f301f7a922"
+        }
+      ]
+    },
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../coroutines-extensions-metadata/1.5.0-SNAPSHOT/coroutines-extensions-metadata-1.5.0-SNAPSHOT.module",
+        "group": "com.squareup.sqldelight",
+        "module": "coroutines-extensions-metadata",
+        "version": "1.5.0-SNAPSHOT"
+      }
+    }
+  ]
+}

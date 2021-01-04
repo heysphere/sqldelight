@@ -1,0 +1,125 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.squareup.sqldelight",
+    "module": "gradle-plugin",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "3ehalzzixvearnsencjhgelklu"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "gradle-plugin-1.5.0-SNAPSHOT.jar",
+          "url": "gradle-plugin-1.5.0-SNAPSHOT.jar",
+          "size": 58996939,
+          "sha512": "d1a131faa566b54d6a84cec06089e7fd7a4e8aac81d60cd89faa436a4fa7901d7bc4db0a61c5254c647d2a47973a8a9bd5d813be4bfed91d41cd3d888f2d4178",
+          "sha256": "c7635dbf6f05efd7706d19ad69a294ec83aff5964b181529d99c7928ca7b02b6",
+          "sha1": "b82c61c85eca4dd70f67b6126602daf11c3bcae4",
+          "md5": "4886762e3188ead10b8fe5dd90ac35b3"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "core",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "migrations",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-native-utils",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.alecstrong",
+          "module": "sqlite-psi-core",
+          "version": {
+            "requires": "0.3.10"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "23.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-gradle-plugin",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "gradle-plugin-1.5.0-SNAPSHOT.jar",
+          "url": "gradle-plugin-1.5.0-SNAPSHOT.jar",
+          "size": 58996939,
+          "sha512": "d1a131faa566b54d6a84cec06089e7fd7a4e8aac81d60cd89faa436a4fa7901d7bc4db0a61c5254c647d2a47973a8a9bd5d813be4bfed91d41cd3d888f2d4178",
+          "sha256": "c7635dbf6f05efd7706d19ad69a294ec83aff5964b181529d99c7928ca7b02b6",
+          "sha1": "b82c61c85eca4dd70f67b6126602daf11c3bcae4",
+          "md5": "4886762e3188ead10b8fe5dd90ac35b3"
+        }
+      ]
+    }
+  ]
+}

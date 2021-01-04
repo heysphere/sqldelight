@@ -1,0 +1,111 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.squareup.sqldelight",
+    "module": "core",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "3ehalzzixvearnsencjhgelklu"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.alecstrong",
+          "module": "sqlite-psi-core",
+          "version": {
+            "requires": "0.3.10"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "core-1.5.0-SNAPSHOT.jar",
+          "url": "core-1.5.0-SNAPSHOT.jar",
+          "size": 416874,
+          "sha512": "e27d142b71e41920dd68d25e3bca33853c5bc8509d353a3052be231975eada6d400cc7f8445c87b1c81a994d1ce456fc309996ad7c2eb851f63a7c09730ee580",
+          "sha256": "3c56849d116ebf23073ad60c5743384badd1d2c70e3715ec5d8557a4dfb30fee",
+          "sha1": "9ad1ad734c00e7c76011ecda13dd8abb2a29c3dd",
+          "md5": "178f52dbd02468a13533716473763f83"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup",
+          "module": "kotlinpoet",
+          "version": {
+            "requires": "1.7.2"
+          }
+        },
+        {
+          "group": "org.xerial",
+          "module": "sqlite-jdbc",
+          "version": {
+            "requires": "3.34.0"
+          }
+        },
+        {
+          "group": "com.alecstrong",
+          "module": "sqlite-psi-core",
+          "version": {
+            "requires": "0.3.10"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "core-1.5.0-SNAPSHOT.jar",
+          "url": "core-1.5.0-SNAPSHOT.jar",
+          "size": 416874,
+          "sha512": "e27d142b71e41920dd68d25e3bca33853c5bc8509d353a3052be231975eada6d400cc7f8445c87b1c81a994d1ce456fc309996ad7c2eb851f63a7c09730ee580",
+          "sha256": "3c56849d116ebf23073ad60c5743384badd1d2c70e3715ec5d8557a4dfb30fee",
+          "sha1": "9ad1ad734c00e7c76011ecda13dd8abb2a29c3dd",
+          "md5": "178f52dbd02468a13533716473763f83"
+        }
+      ]
+    }
+  ]
+}

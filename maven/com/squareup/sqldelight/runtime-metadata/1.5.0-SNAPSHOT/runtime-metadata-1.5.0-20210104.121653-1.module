@@ -1,0 +1,47 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../runtime-watchosx86/1.5.0-SNAPSHOT/runtime-watchosx86-1.5.0-SNAPSHOT.module",
+    "group": "com.squareup.sqldelight",
+    "module": "runtime-watchosx86",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "3ehalzzixvearnsencjhgelklu"
+    }
+  },
+  "variants": [
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime-metadata-1.5.0-SNAPSHOT.jar",
+          "url": "runtime-metadata-1.5.0-SNAPSHOT.jar",
+          "size": 13953,
+          "sha512": "0f3785a98da903ebba75fe2da893d5df0f6dc0a68e241ec25f040ef80c51dfeee46b5471b2faca526f54408f7852a67fa38e30f5fd4d5ea7a6dc0c9c67e93c82",
+          "sha256": "e632877bd9e8557dfe6c7939ccbbf5e6e697d709fb4322a81a22f452eb2fa4b3",
+          "sha1": "f4c6866198ce6f4f685857a85cd1b3b86300adb6",
+          "md5": "c4e879e8ee5d3422d74a7c0a3f894272"
+        }
+      ]
+    }
+  ]
+}

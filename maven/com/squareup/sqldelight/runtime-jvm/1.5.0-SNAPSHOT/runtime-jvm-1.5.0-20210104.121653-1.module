@@ -1,0 +1,103 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../runtime/1.5.0-SNAPSHOT/runtime-1.5.0-SNAPSHOT.module",
+    "group": "com.squareup.sqldelight",
+    "module": "runtime",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "3ehalzzixvearnsencjhgelklu"
+    }
+  },
+  "variants": [
+    {
+      "name": "jvm-api",
+      "attributes": {
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime-jvm-1.5.0-SNAPSHOT.jar",
+          "url": "runtime-jvm-1.5.0-SNAPSHOT.jar",
+          "size": 45528,
+          "sha512": "271171ebd8ac8a0f6e39e1d8f554ace2776bc9c627d64a38480f476697c340de51dc39b92b5ff58c5122482d8804e25b27c2104e62b1c3e488f0e81a2da52274",
+          "sha256": "2164d7276c3e43fc14b5b44af3b58d4af95c216b002eabc5c9e7220cf2ed18b8",
+          "sha1": "c4a5944ab001f920b2193051be0155968796510e",
+          "md5": "cdf79d75725e50cf6715b214def656a8"
+        }
+      ]
+    },
+    {
+      "name": "jvm-runtime",
+      "attributes": {
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime-jvm-1.5.0-SNAPSHOT.jar",
+          "url": "runtime-jvm-1.5.0-SNAPSHOT.jar",
+          "size": 45528,
+          "sha512": "271171ebd8ac8a0f6e39e1d8f554ace2776bc9c627d64a38480f476697c340de51dc39b92b5ff58c5122482d8804e25b27c2104e62b1c3e488f0e81a2da52274",
+          "sha256": "2164d7276c3e43fc14b5b44af3b58d4af95c216b002eabc5c9e7220cf2ed18b8",
+          "sha1": "c4a5944ab001f920b2193051be0155968796510e",
+          "md5": "cdf79d75725e50cf6715b214def656a8"
+        }
+      ]
+    },
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../runtime-metadata/1.5.0-SNAPSHOT/runtime-metadata-1.5.0-SNAPSHOT.module",
+        "group": "com.squareup.sqldelight",
+        "module": "runtime-metadata",
+        "version": "1.5.0-SNAPSHOT"
+      }
+    }
+  ]
+}

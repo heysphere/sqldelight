@@ -1,0 +1,105 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.squareup.sqldelight",
+    "module": "android-paging-extensions",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "3ehalzzixvearnsencjhgelklu"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime-jvm",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "androidx.paging",
+          "module": "paging-common",
+          "version": {
+            "requires": "2.1.2"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "android-paging-extensions-1.5.0-SNAPSHOT.aar",
+          "url": "android-paging-extensions-1.5.0-SNAPSHOT.aar",
+          "size": 5812,
+          "sha512": "1c5abe20367f53f9b76ce88acc668d7084f5dac76b23b8095b833de2156119a3bdd44f9a6cb1a19ae390598f050f676bb22fceb4f1ed79de526100bced01d1e5",
+          "sha256": "415034f7374a4cb48b368ce89fc0f9511ad1c4f455a9a7b073e72c27e15fcee1",
+          "sha1": "fa7b4c284a188027833284b6ebbd4ab81a22aba5",
+          "md5": "4b56e25174b358d0bb9a487d40af78f7"
+        }
+      ]
+    },
+    {
+      "name": "releaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime-jvm",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "androidx.paging",
+          "module": "paging-common",
+          "version": {
+            "requires": "2.1.2"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "android-paging-extensions-1.5.0-SNAPSHOT.aar",
+          "url": "android-paging-extensions-1.5.0-SNAPSHOT.aar",
+          "size": 5812,
+          "sha512": "1c5abe20367f53f9b76ce88acc668d7084f5dac76b23b8095b833de2156119a3bdd44f9a6cb1a19ae390598f050f676bb22fceb4f1ed79de526100bced01d1e5",
+          "sha256": "415034f7374a4cb48b368ce89fc0f9511ad1c4f455a9a7b073e72c27e15fcee1",
+          "sha1": "fa7b4c284a188027833284b6ebbd4ab81a22aba5",
+          "md5": "4b56e25174b358d0bb9a487d40af78f7"
+        }
+      ]
+    }
+  ]
+}

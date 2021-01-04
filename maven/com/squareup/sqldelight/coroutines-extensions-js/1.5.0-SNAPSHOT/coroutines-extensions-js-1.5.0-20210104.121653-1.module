@@ -1,0 +1,229 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../coroutines-extensions/1.5.0-SNAPSHOT/coroutines-extensions-1.5.0-SNAPSHOT.module",
+    "group": "com.squareup.sqldelight",
+    "module": "coroutines-extensions",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "3ehalzzixvearnsencjhgelklu"
+    }
+  },
+  "variants": [
+    {
+      "name": "jsLegacy-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.js.compiler": "legacy",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.3.9"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqldelight-coroutines-extensions-jslegacy-1.5.0-SNAPSHOT.jar",
+          "url": "coroutines-extensions-js-1.5.0-SNAPSHOT.jar",
+          "size": 8176,
+          "sha512": "5d6e0bf50738690a76acc94732d5285ebaa90342947b471a4ad709c1ac25bcbb9b6e71e74ed52c9a1609cbdc29e14bbcffa46f743a2d5cfed20c91532a6a8112",
+          "sha256": "f0aabb4e566b06d7ca27e667bb1633b1b264b6e4f1a32b2f7264948ce57488c1",
+          "sha1": "67b62220df3323d478cb2e13aff1c6a67524d1e5",
+          "md5": "f02d5c2b782ba37f91a6fc1c998b3979"
+        }
+      ]
+    },
+    {
+      "name": "jsLegacy-runtime",
+      "attributes": {
+        "org.gradle.usage": "kotlin-runtime",
+        "org.jetbrains.kotlin.js.compiler": "legacy",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.3.9"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqldelight-coroutines-extensions-jslegacy-1.5.0-SNAPSHOT.jar",
+          "url": "coroutines-extensions-js-1.5.0-SNAPSHOT.jar",
+          "size": 8176,
+          "sha512": "5d6e0bf50738690a76acc94732d5285ebaa90342947b471a4ad709c1ac25bcbb9b6e71e74ed52c9a1609cbdc29e14bbcffa46f743a2d5cfed20c91532a6a8112",
+          "sha256": "f0aabb4e566b06d7ca27e667bb1633b1b264b6e4f1a32b2f7264948ce57488c1",
+          "sha1": "67b62220df3323d478cb2e13aff1c6a67524d1e5",
+          "md5": "f02d5c2b782ba37f91a6fc1c998b3979"
+        }
+      ]
+    },
+    {
+      "name": "jsIr-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.js.compiler": "ir",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.3.9"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqldelight-coroutines-extensions-jsir-1.5.0-SNAPSHOT.klib",
+          "url": "coroutines-extensions-js-1.5.0-SNAPSHOT.klib",
+          "size": 7448,
+          "sha512": "590d0b816172c17ca3a893751488b5ada0588abcc672307ffb45f82d8a05060bcebf3d9c3a8691c51a3db3d9eedc510437caf1353dc9d9acd765e34adc876fdb",
+          "sha256": "87ee4bcdf88c73bad23a83532e59336fc6a1b216e902636eac49c1f00d2f1c83",
+          "sha1": "c0ff0b3e41c3259b2e6fc1f7b23b6b2392a63784",
+          "md5": "642439d59271bc4d0041492feb7cdad7"
+        }
+      ]
+    },
+    {
+      "name": "jsIr-runtime",
+      "attributes": {
+        "org.gradle.usage": "kotlin-runtime",
+        "org.jetbrains.kotlin.js.compiler": "ir",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.3.9"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "sqldelight-coroutines-extensions-jsir-1.5.0-SNAPSHOT.klib",
+          "url": "coroutines-extensions-js-1.5.0-SNAPSHOT.klib",
+          "size": 7448,
+          "sha512": "590d0b816172c17ca3a893751488b5ada0588abcc672307ffb45f82d8a05060bcebf3d9c3a8691c51a3db3d9eedc510437caf1353dc9d9acd765e34adc876fdb",
+          "sha256": "87ee4bcdf88c73bad23a83532e59336fc6a1b216e902636eac49c1f00d2f1c83",
+          "sha1": "c0ff0b3e41c3259b2e6fc1f7b23b6b2392a63784",
+          "md5": "642439d59271bc4d0041492feb7cdad7"
+        }
+      ]
+    },
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../coroutines-extensions-metadata/1.5.0-SNAPSHOT/coroutines-extensions-metadata-1.5.0-SNAPSHOT.module",
+        "group": "com.squareup.sqldelight",
+        "module": "coroutines-extensions-metadata",
+        "version": "1.5.0-SNAPSHOT"
+      }
+    }
+  ]
+}
