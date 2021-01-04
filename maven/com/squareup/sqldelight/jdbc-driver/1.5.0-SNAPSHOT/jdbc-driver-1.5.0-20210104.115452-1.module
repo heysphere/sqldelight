@@ -1,0 +1,97 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.squareup.sqldelight",
+    "module": "jdbc-driver",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "xwktddyadzbtnf4duirkvykzdi"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "jdbc-driver-1.5.0-SNAPSHOT.jar",
+          "url": "jdbc-driver-1.5.0-SNAPSHOT.jar",
+          "size": 12702,
+          "sha512": "957e69aaeee938d911d75610ce9cb85d41ecfa759419da3a64bb62dcbea9e144fbd23d2739d21736427aa595512310d3bc67b9e6fd5b333fad82e062d70bea20",
+          "sha256": "10a6e6d5462b91212258333e1aca5b44ab4e660380d3a2ec697f8c7ed3467a6e",
+          "sha1": "32ed694649318106d70f589a361d6c34b673df5b",
+          "md5": "c338e15e109247a6fb1a767701cf4530"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "jdbc-driver-1.5.0-SNAPSHOT.jar",
+          "url": "jdbc-driver-1.5.0-SNAPSHOT.jar",
+          "size": 12702,
+          "sha512": "957e69aaeee938d911d75610ce9cb85d41ecfa759419da3a64bb62dcbea9e144fbd23d2739d21736427aa595512310d3bc67b9e6fd5b333fad82e062d70bea20",
+          "sha256": "10a6e6d5462b91212258333e1aca5b44ab4e660380d3a2ec697f8c7ed3467a6e",
+          "sha1": "32ed694649318106d70f589a361d6c34b673df5b",
+          "md5": "c338e15e109247a6fb1a767701cf4530"
+        }
+      ]
+    }
+  ]
+}

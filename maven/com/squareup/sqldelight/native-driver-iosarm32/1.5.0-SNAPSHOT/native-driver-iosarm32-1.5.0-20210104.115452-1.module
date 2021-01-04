@@ -1,0 +1,90 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../native-driver/1.5.0-SNAPSHOT/native-driver-1.5.0-SNAPSHOT.module",
+    "group": "com.squareup.sqldelight",
+    "module": "native-driver",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "xwktddyadzbtnf4duirkvykzdi"
+    }
+  },
+  "variants": [
+    {
+      "name": "iosArm32-api",
+      "attributes": {
+        "artifactType": "org.jetbrains.kotlin.klib",
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.native.target": "ios_arm32",
+        "org.jetbrains.kotlin.platform.type": "native"
+      },
+      "dependencies": [
+        {
+          "group": "com.squareup.sqldelight",
+          "module": "runtime",
+          "version": {
+            "requires": "1.5.0-SNAPSHOT"
+          }
+        },
+        {
+          "group": "co.touchlab",
+          "module": "sqliter",
+          "version": {
+            "requires": "0.7.0"
+          }
+        },
+        {
+          "group": "co.touchlab",
+          "module": "stately-common",
+          "version": {
+            "requires": "1.1.1"
+          }
+        },
+        {
+          "group": "co.touchlab",
+          "module": "stately-concurrency",
+          "version": {
+            "requires": "1.1.1"
+          }
+        },
+        {
+          "group": "co.touchlab",
+          "module": "stately-collections",
+          "version": {
+            "requires": "1.1.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "native-driver.klib",
+          "url": "native-driver-iosarm32-1.5.0-SNAPSHOT.klib",
+          "size": 36187,
+          "sha512": "9eadfb21a12d8fb3ffd9e7f506d1e2abce28ca43a79a8c6c6d15705a398ea5e2e937a99df75e4c23d5c788a9d429d4f77f49fd10183b5f381344839f65b5b660",
+          "sha256": "23fdd7a0f175c5fa460b359c61e9fd20526b84510f77c9f145ed8ad03f732433",
+          "sha1": "657242eb4b0cd5f78d8e4956b3e2f0153c82b4cf",
+          "md5": "9da7735c079adf3e70ac7833f7a67b32"
+        }
+      ]
+    },
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../native-driver-metadata/1.5.0-SNAPSHOT/native-driver-metadata-1.5.0-SNAPSHOT.module",
+        "group": "com.squareup.sqldelight",
+        "module": "native-driver-metadata",
+        "version": "1.5.0-SNAPSHOT"
+      }
+    }
+  ]
+}

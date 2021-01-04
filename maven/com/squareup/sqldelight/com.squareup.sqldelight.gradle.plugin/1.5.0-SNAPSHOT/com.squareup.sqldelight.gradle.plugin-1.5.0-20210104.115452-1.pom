@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.squareup.sqldelight</groupId>
+  <artifactId>com.squareup.sqldelight.gradle.plugin</artifactId>
+  <version>1.5.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <url>https://github.com/square/sqldelight/</url>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>square</id>
+      <name>Square, Inc.</name>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git://github.com/square/sqldelight.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/square/sqldelight.git</developerConnection>
+    <url>https://github.com/square/sqldelight/</url>
+  </scm>
+  <name>SQLDelight Gradle Plugin</name>
+  <description>Gradle plugin for generating kotlin interfaces for sqlite files</description>
+  <dependencies>
+    <dependency>
+      <groupId>com.squareup.sqldelight</groupId>
+      <artifactId>gradle-plugin</artifactId>
+      <version>1.5.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>

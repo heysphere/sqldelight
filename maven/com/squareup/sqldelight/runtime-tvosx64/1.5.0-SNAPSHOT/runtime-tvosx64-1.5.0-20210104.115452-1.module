@@ -1,0 +1,76 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../runtime/1.5.0-SNAPSHOT/runtime-1.5.0-SNAPSHOT.module",
+    "group": "com.squareup.sqldelight",
+    "module": "runtime",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "xwktddyadzbtnf4duirkvykzdi"
+    }
+  },
+  "variants": [
+    {
+      "name": "tvosX64-api",
+      "attributes": {
+        "artifactType": "org.jetbrains.kotlin.klib",
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.native.target": "tvos_x64",
+        "org.jetbrains.kotlin.platform.type": "native"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "co.touchlab",
+          "module": "stately-common",
+          "version": {
+            "requires": "1.1.1"
+          }
+        },
+        {
+          "group": "co.touchlab",
+          "module": "stately-collections",
+          "version": {
+            "requires": "1.1.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime.klib",
+          "url": "runtime-tvosx64-1.5.0-SNAPSHOT.klib",
+          "size": 41246,
+          "sha512": "9e2e1f42a79182e790999efbbb33aaa255943f3965435b49f097108c5c01ec8aa573cfabf78a26b4f65535552240d373b295b062d9fd612b4f0659be7c9781ef",
+          "sha256": "781d9e604e4921890f15bb4d1975e888ed91d2f7e26c0a28eb33ea053f1b2a17",
+          "sha1": "715c5631b44ce48a6b5e62a7eff0abfc84aa8ed8",
+          "md5": "3efb833b62ae7af7f147bb73be2f1c76"
+        }
+      ]
+    },
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../runtime-metadata/1.5.0-SNAPSHOT/runtime-metadata-1.5.0-SNAPSHOT.module",
+        "group": "com.squareup.sqldelight",
+        "module": "runtime-metadata",
+        "version": "1.5.0-SNAPSHOT"
+      }
+    }
+  ]
+}

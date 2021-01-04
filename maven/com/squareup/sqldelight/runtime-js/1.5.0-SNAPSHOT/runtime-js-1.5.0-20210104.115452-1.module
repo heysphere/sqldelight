@@ -1,0 +1,173 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../runtime/1.5.0-SNAPSHOT/runtime-1.5.0-SNAPSHOT.module",
+    "group": "com.squareup.sqldelight",
+    "module": "runtime",
+    "version": "1.5.0-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.6.1",
+      "buildId": "xwktddyadzbtnf4duirkvykzdi"
+    }
+  },
+  "variants": [
+    {
+      "name": "jsLegacy-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.js.compiler": "legacy",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime-jslegacy-1.5.0-SNAPSHOT.jar",
+          "url": "runtime-js-1.5.0-SNAPSHOT.jar",
+          "size": 35453,
+          "sha512": "f89f8ea98202b61f58548ff7377aee5981894ffaa671981d60a4a7e282e1229d094e98a6512b99234292f43d0cf76e12b0a17bdb60a047cee86be54619aad3ca",
+          "sha256": "ec6d1a721223376ec9a03a434ed34893a6439aa55b9d2878e78b3b89bdf08306",
+          "sha1": "445344128baee1dec069364b83d166d7a2342bec",
+          "md5": "df57f557c4762c806e21ba3c90c5cf08"
+        }
+      ]
+    },
+    {
+      "name": "jsLegacy-runtime",
+      "attributes": {
+        "org.gradle.usage": "kotlin-runtime",
+        "org.jetbrains.kotlin.js.compiler": "legacy",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime-jslegacy-1.5.0-SNAPSHOT.jar",
+          "url": "runtime-js-1.5.0-SNAPSHOT.jar",
+          "size": 35453,
+          "sha512": "f89f8ea98202b61f58548ff7377aee5981894ffaa671981d60a4a7e282e1229d094e98a6512b99234292f43d0cf76e12b0a17bdb60a047cee86be54619aad3ca",
+          "sha256": "ec6d1a721223376ec9a03a434ed34893a6439aa55b9d2878e78b3b89bdf08306",
+          "sha1": "445344128baee1dec069364b83d166d7a2342bec",
+          "md5": "df57f557c4762c806e21ba3c90c5cf08"
+        }
+      ]
+    },
+    {
+      "name": "jsIr-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.js.compiler": "ir",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime-jsir-1.5.0-SNAPSHOT.klib",
+          "url": "runtime-js-1.5.0-SNAPSHOT.klib",
+          "size": 39669,
+          "sha512": "a9cca938cdb424086a51007d6643ee1c0859b5d15e5bcca97819ef0f9f012e8b77124438523c7761701d74fa7e0e8d54296b49eca84aa63dce4f8c3127d65f5c",
+          "sha256": "20f28eb6ca0da340094f00ff0f1f8ff2b49ba04186c9036ce67b20efce9bbdbf",
+          "sha1": "badcef950c088eda04d87183aa9764fbdb5267d7",
+          "md5": "37d48827dd9cc5da602c69261ee1aea4"
+        }
+      ]
+    },
+    {
+      "name": "jsIr-runtime",
+      "attributes": {
+        "org.gradle.usage": "kotlin-runtime",
+        "org.jetbrains.kotlin.js.compiler": "ir",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "runtime-jsir-1.5.0-SNAPSHOT.klib",
+          "url": "runtime-js-1.5.0-SNAPSHOT.klib",
+          "size": 39669,
+          "sha512": "a9cca938cdb424086a51007d6643ee1c0859b5d15e5bcca97819ef0f9f012e8b77124438523c7761701d74fa7e0e8d54296b49eca84aa63dce4f8c3127d65f5c",
+          "sha256": "20f28eb6ca0da340094f00ff0f1f8ff2b49ba04186c9036ce67b20efce9bbdbf",
+          "sha1": "badcef950c088eda04d87183aa9764fbdb5267d7",
+          "md5": "37d48827dd9cc5da602c69261ee1aea4"
+        }
+      ]
+    },
+    {
+      "name": "metadata-api",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../runtime-metadata/1.5.0-SNAPSHOT/runtime-metadata-1.5.0-SNAPSHOT.module",
+        "group": "com.squareup.sqldelight",
+        "module": "runtime-metadata",
+        "version": "1.5.0-SNAPSHOT"
+      }
+    }
+  ]
+}
